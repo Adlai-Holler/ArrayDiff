@@ -14,6 +14,14 @@ public extension NSRange {
 	}
 }
 
+// MARK: NSIndexSet -> [NSIndexPath] conversion
+
+public extension NSIndexSet {
+	public func indexPathsInSection(section: Int) -> [NSIndexPath] {
+		return map { NSIndexPath(forItem: $0, inSection: section) }
+	}
+}
+
 // MARK: NSIndexSet support
 
 public extension Array {
