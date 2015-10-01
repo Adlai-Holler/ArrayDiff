@@ -1,6 +1,6 @@
 # ArrayDiff
 
-A Swift utility to get the longest-common-subsequence difference of two arrays.
+A Swift utility to get the [longest-common-subsequence](https://en.wikipedia.org/wiki/Longest_common_subsequence_problem) difference of two arrays.
 
 # Usage
 
