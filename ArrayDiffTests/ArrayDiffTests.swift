@@ -42,5 +42,32 @@ class ArrayDiffTests: XCTestCase {
 		reconstructed.insertElements(new[diff.insertedIndexes], atIndexes: diff.insertedIndexes)
 		XCTAssertEqual(reconstructed, new)
     }
-    
+	
+	func testNewIndexForOldIndex() {
+		let old = "a b c d e".componentsSeparatedByString(" ")
+		let new = "m a b f".componentsSeparatedByString(" ")
+		let diff = old.diff(new)
+		let newIndexes: [Int?] = (0..<old.count).map { diff.newIndexForOldIndex($0) }
+		let expectedNewIndexes: [Int?] = [1, 2, nil, nil, nil]
+		// can't compare [Int?] to [Int?]
+		for (i, (idx, expectedIdx)) in zip(newIndexes, expectedNewIndexes).enumerate() {
+			if idx != expectedIdx {
+				XCTFail("New index for \(i) should be \(expectedIdx), got \(idx)")
+			}
+		}
+	}
+	
+	func testOldIndexForNewIndex() {
+		let old = "a b c d e".componentsSeparatedByString(" ")
+		let new = "m a b f".componentsSeparatedByString(" ")
+		let diff = old.diff(new)
+		let oldIndexes: [Int?] = (0..<new.count).map { diff.oldIndexForNewIndex($0) }
+		let expectedOldIndexes: [Int?] = [nil, 0, 1, nil]
+		// can't compare [Int?] to [Int?]
+		for (idx, expectedIdx) in zip(oldIndexes, expectedOldIndexes) {
+			if idx != expectedIdx {
+				XCTFail()
+			}
+		}
+	}
 }

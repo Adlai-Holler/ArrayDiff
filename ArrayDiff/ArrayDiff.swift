@@ -2,9 +2,32 @@
 import Foundation
 
 public struct ArrayDiff {
-	let commonIndexes: NSIndexSet
-	let removedIndexes: NSIndexSet
-	let insertedIndexes: NSIndexSet
+	/// The indexes in the old array of the items that were kept
+	public let commonIndexes: NSIndexSet
+	/// The indexes in the old array of the items that were removed
+	public let removedIndexes: NSIndexSet
+	/// The indexes in the new array of the items that were inserted
+	public let insertedIndexes: NSIndexSet
+	
+	/// Returns nil if the item was inserted
+	public func oldIndexForNewIndex(index: Int) -> Int? {
+		if insertedIndexes.containsIndex(index) { return nil }
+		
+		var result = index
+		result -= insertedIndexes.countOfIndexesInRange(NSMakeRange(0, index))
+		result += removedIndexes.countOfIndexesInRange(NSMakeRange(0, result + 1))
+		return result
+	}
+	
+	/// Returns nil if the item was deleted
+	public func newIndexForOldIndex(index: Int) -> Int? {
+		if removedIndexes.containsIndex(index) { return nil }
+		
+		var result = index
+		result -= removedIndexes.countOfIndexesInRange(NSMakeRange(0, index))
+		result += insertedIndexes.countOfIndexesInRange(NSMakeRange(0, result + 1))
+		return result
+	}
 }
 
 public extension Array where Element: Equatable {
