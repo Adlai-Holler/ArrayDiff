@@ -28,15 +28,16 @@ public extension Array {
 	
 	public subscript (indexes: NSIndexSet) -> [Element] {
 		var result: [Element] = []
-		indexes.enumerateRangesUsingBlock { range, _ in
-			result += self[range.range]
+		result.reserveCapacity(indexes.count)
+		indexes.enumerateRangesUsingBlock { nsRange, _ in
+			result += self[nsRange.range]
 		}
 		return result
 	}
 	
 	public mutating func removeAtIndexes(indexSet: NSIndexSet) {
-		indexSet.enumerateRangesWithOptions(.Reverse) { range, _ in
-			self.removeRange(range.range)
+		indexSet.enumerateRangesWithOptions(.Reverse) { nsRange, _ in
+			self.removeRange(nsRange.range)
 		}
 	}
 	
