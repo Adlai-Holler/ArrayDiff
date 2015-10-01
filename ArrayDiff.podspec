@@ -10,6 +10,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.osx.deployment_target = "10.9"
   s.ios.deployment_target = "8.0"
-  s.source   = { :git => "https://github.com/Adlai-Holler/ArrayDiff", :tag => "1.0.0"}
+  s.source   = { :git => "https://github.com/Adlai-Holler/ArrayDiff.git", :tag => "v1.0.0" }
   s.source_files = "ArrayDiff/*.swift"
 end
