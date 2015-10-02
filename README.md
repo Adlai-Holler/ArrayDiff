@@ -15,6 +15,9 @@ let diff = old.diff(new)
 // diff.removedIndexes = [2-4]
 // diff.commonIndexes = [0-1]
 
+let newIndexForA = diff.newIndexForOldIndex(0) // == 1
+let oldIndexForF = diff.oldIndexForNewIndex(3) // == nil
+
 tableView.beginUpdates()
 tableView.deleteRowsAtIndexPaths(diff.removedIndexes.indexPathsInSection(0), withRowAnimation: .Automatic)
 tableView.insertRowsAtIndexPaths(diff.insertedIndexes.indexPathsInSection(0), withRowAnimation: .Automatic)
