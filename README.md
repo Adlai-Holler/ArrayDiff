@@ -2,7 +2,7 @@
 
 A Swift utility to get the [longest-common-subsequence](https://en.wikipedia.org/wiki/Longest_common_subsequence_problem) difference of two arrays.
 
-# Usage
+## Usage
 
 A really powerful use for this framework is when updating a UITableView or UICollectionView. It can be very expensive to call `reloadData` but really inconvenient to keep track of array differences your self.
 
@@ -23,3 +23,7 @@ tableView.deleteRowsAtIndexPaths(diff.removedIndexes.indexPathsInSection(0), wit
 tableView.insertRowsAtIndexPaths(diff.insertedIndexes.indexPathsInSection(0), withRowAnimation: .Automatic)
 tableView.endUpdates()
 ```
+
+## Attribution
+
+Thanks to https://github.com/khanlou/NSArray-LongestCommonSubsequence which I ~~took inspiration~~ totally copied from.
