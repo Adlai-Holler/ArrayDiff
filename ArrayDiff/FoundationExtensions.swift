@@ -18,7 +18,7 @@ public extension NSRange {
 
 public extension NSIndexSet {
 	public func indexPathsInSection(section: Int) -> [NSIndexPath] {
-		return map { NSIndexPath(forItem: $0, inSection: section) }
+		return map { NSIndexPath(indexes: [section, $0], length: 2) }
 	}
 }
 
