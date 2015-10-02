@@ -11,9 +11,9 @@ let old = ["a", "b", "c", "d", "e"]
 let new = ["x", "a", "b", "f"]
 
 let diff = old.diff(new)
-// diff.insertedIndexes = [0, 3]
-// diff.removedIndexes = [2-4]
 // diff.commonIndexes = [0-1]
+// diff.removedIndexes = [2-4]
+// diff.insertedIndexes = [0, 3]
 
 let newIndexForA = diff.newIndexForOldIndex(0) // == 1
 let oldIndexForF = diff.oldIndexForNewIndex(3) // == nil
