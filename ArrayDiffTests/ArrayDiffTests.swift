@@ -70,4 +70,25 @@ class ArrayDiffTests: XCTestCase {
 			}
 		}
 	}
+	
+	func testCustomEqualityOperator() {
+		let old = "a b c d e".componentsSeparatedByString(" ")
+		let oldWrapped = old.map { TestType(value: $0) }
+		let new = "m a b f".componentsSeparatedByString(" ")
+		let newWrapped = new.map { TestType(value: $0) }
+		let diff = oldWrapped.diff(newWrapped, elementsAreEqual: TestType.customEqual)
+		var reconstructed = oldWrapped
+		reconstructed.removeAtIndexes(diff.removedIndexes)
+		reconstructed.insertElements(newWrapped[diff.insertedIndexes], atIndexes: diff.insertedIndexes)
+		let reconstructedUnwrapped = reconstructed.map { $0.value }
+		XCTAssertEqual(reconstructedUnwrapped, new)
+	}
+}
+
+struct TestType {
+	var value: String
+	
+	static func customEqual(t0: TestType, t1: TestType) -> Bool {
+		return t0.value == t1.value
+	}
 }

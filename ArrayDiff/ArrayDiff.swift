@@ -30,8 +30,8 @@ public struct ArrayDiff {
 	}
 }
 
-public extension Array where Element: Equatable {
-	public func diff(other: Array<Element>) -> ArrayDiff {
+public extension Array {
+	public func diff(other: Array<Element>, elementsAreEqual: ((Element, Element) -> Bool)) -> ArrayDiff {
 		var lengths: [[Int]] = Array<Array<Int>>(
 			count: count + 1,
 			repeatedValue: Array<Int>(
@@ -43,7 +43,7 @@ public extension Array where Element: Equatable {
 			for var j = other.count; j >= 0; j-- {
 				if i == count || j == other.count {
 					lengths[i][j] = 0
-				} else if self[i] == other[j] {
+				} else if elementsAreEqual(self[i], other[j]) {
 					lengths[i][j] = 1 + lengths[i+1][j+1]
 				} else {
 					lengths[i][j] = max(lengths[i+1][j], lengths[i][j+1])
@@ -53,7 +53,7 @@ public extension Array where Element: Equatable {
 		let commonIndexes = NSMutableIndexSet()
 		
 		for var i = 0, j = 0; i < count && j < other.count; {
-			if self[i] == other[j] {
+			if elementsAreEqual(self[i], other[j]) {
 				commonIndexes.addIndex(i)
 				i++
 				j++
@@ -74,7 +74,7 @@ public extension Array where Element: Equatable {
 		let commonObjects = self[commonIndexes]
 		let addedIndexes = NSMutableIndexSet()
 		for var i = 0, j = 0; i < commonObjects.count || j < other.count; {
-			if i < commonObjects.count && j < other.count && commonObjects[i] == other[j] {
+			if i < commonObjects.count && j < other.count && elementsAreEqual (commonObjects[i], other[j]) {
 				i++
 				j++
 			} else {
@@ -84,5 +84,11 @@ public extension Array where Element: Equatable {
 		}
 		
 		return ArrayDiff(commonIndexes: commonIndexes, removedIndexes: removedIndexes, insertedIndexes: addedIndexes)
+	}
+}
+
+public extension Array where Element: Equatable {
+	public func diff(other: Array<Element>) -> ArrayDiff {
+		return self.diff(other, elementsAreEqual: { $0 == $1 })
 	}
 }
