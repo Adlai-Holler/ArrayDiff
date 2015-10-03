@@ -13,12 +13,18 @@ let old = [
   BasicSection(name: "Charlie", items: ["k", "l", "m", "n", "o"])
 ]
 let new = [
-  BasicSection(name: "Alpha", items: ["a", "b", "c", "d", "e"]),
+  BasicSection(name: "Alpha", items: ["a", "b", "d", "e", "x"]),
   BasicSection(name: "Charlie", items: ["f", "g", "h", "i", "j"]),
   BasicSection(name: "Delta", items: ["f", "g", "h", "i", "j"])
 ]
 
 let nestedDiff = old.diffNested(new)
+// nestedDiff.sectionsDiff.removedIndexes == [1]
+// nestedDiff.sectionsDiff.insertedIndexes == [2]
+// nestedDiff.itemDiffs[0].removedIndexes == [2]
+// nestedDiff.itemDiffs[0].insertedIndexes == [5]
+// etc.
+
 tableView.beginUpdates()
 self.data = new
 nestedDiff.applyToTableView(tableView, rowAnimation: .Automatic)
