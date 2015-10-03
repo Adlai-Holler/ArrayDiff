@@ -24,6 +24,10 @@ tableView.insertRowsAtIndexPaths(diff.insertedIndexes.indexPathsInSection(0), wi
 tableView.endUpdates()
 ```
 
+## Example Project
+
+Check out the iOS app in the Example folder to see this framework pushed to its limits to drive a UITableView. In it we have a table view with 20 sections of strings. When you tap update, the data is randomly updated and we assert that the changes we made are equal to the changes that the framework recovers by comparing the two arrays.
+
 ## Attribution
 
 Thanks to https://github.com/khanlou/NSArray-LongestCommonSubsequence which I ~~took inspiration~~ totally copied from.
