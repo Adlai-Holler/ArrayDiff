@@ -49,12 +49,7 @@ class ArrayDiffTests: XCTestCase {
 		let diff = old.diff(new)
 		let newIndexes: [Int?] = (0..<old.count).map { diff.newIndexForOldIndex($0) }
 		let expectedNewIndexes: [Int?] = [1, 2, nil, nil, nil]
-		// can't compare [Int?] to [Int?]
-		for (i, (idx, expectedIdx)) in zip(newIndexes, expectedNewIndexes).enumerate() {
-			if idx != expectedIdx {
-				XCTFail("New index for \(i) should be \(expectedIdx), got \(idx)")
-			}
-		}
+		XCTAssert(newIndexes.elementsEqual(expectedNewIndexes, isEquivalent: { $0 == $1 }), "Expected newIndexes to be \(expectedNewIndexes), got \(newIndexes)")
 	}
 	
 	func testNewIndexForOldIndexWithInsertTail() {
@@ -63,12 +58,7 @@ class ArrayDiffTests: XCTestCase {
 		let diff = old.diff(new)
 		let newIndexes: [Int?] = (0..<old.count).map { diff.newIndexForOldIndex($0) }
 		let expectedNewIndexes: [Int?] = [0, 1, 2, 8]
-		// can't compare [Int?] to [Int?]
-		for (i, (idx, expectedIdx)) in zip(newIndexes, expectedNewIndexes).enumerate() {
-			if idx != expectedIdx {
-				XCTFail("New index for \(i) should be \(expectedIdx), got \(idx)")
-			}
-		}
+		XCTAssert(newIndexes.elementsEqual(expectedNewIndexes, isEquivalent: { $0 == $1 }), "Expected newIndexes to be \(expectedNewIndexes), got \(newIndexes)")
 	}
 	
 	func testOldIndexForNewIndex() {
@@ -77,12 +67,7 @@ class ArrayDiffTests: XCTestCase {
 		let diff = old.diff(new)
 		let oldIndexes: [Int?] = (0..<new.count).map { diff.oldIndexForNewIndex($0) }
 		let expectedOldIndexes: [Int?] = [nil, 0, 1, nil]
-		// can't compare [Int?] to [Int?]
-		for (idx, expectedIdx) in zip(oldIndexes, expectedOldIndexes) {
-			if idx != expectedIdx {
-				XCTFail()
-			}
-		}
+		XCTAssert(oldIndexes.elementsEqual(expectedOldIndexes, isEquivalent: { $0 == $1 }), "Expected oldIndexes to be \(expectedOldIndexes), got \(oldIndexes)")
 	}
 	
 	func testCustomEqualityOperator() {
