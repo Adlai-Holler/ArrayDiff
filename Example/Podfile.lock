@@ -1,0 +1,14 @@
+PODS:
+  - ArrayDiff (1.0.0)
+
+DEPENDENCIES:
+  - ArrayDiff (from `../`)
+
+EXTERNAL SOURCES:
+  ArrayDiff:
+    :path: ../
+
+SPEC CHECKSUMS:
+  ArrayDiff: 551ef82d1955bfee3af21537c6378a6a2e28685c
+
+COCOAPODS: 0.38.2
