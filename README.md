@@ -1,4 +1,4 @@
-# ArrayDiff
+# ArrayDiff [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) ![Pods](https://cocoapod-badges.herokuapp.com/v/ArrayDiff/badge.png)
 
 A Swift utility to get the [longest-common-subsequence](https://en.wikipedia.org/wiki/Longest_common_subsequence_problem) difference of two arrays.
 
