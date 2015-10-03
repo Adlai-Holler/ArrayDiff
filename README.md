@@ -7,22 +7,27 @@ An efficient Swift utility to compute the difference between two arrays. Get the
 A really powerful use for this framework is when updating a UITableView or UICollectionView. It can be very expensive to call `reloadData` but really inconvenient to keep track of array differences your self.
 
 ```swift
-let old = ["a", "b", "c", "d", "e"]
-let new = ["x", "a", "b", "f"]
+let old = [
+  BasicSection(name: "Alpha", items: ["a", "b", "c", "d", "e"]),
+  BasicSection(name: "Bravo", items: ["f", "g", "h", "i", "j"]),
+  BasicSection(name: "Charlie", items: ["k", "l", "m", "n", "o"])
+]
+let new = [
+  BasicSection(name: "Alpha", items: ["a", "b", "c", "d", "e"]),
+  BasicSection(name: "Charlie", items: ["f", "g", "h", "i", "j"]),
+  BasicSection(name: "Delta", items: ["f", "g", "h", "i", "j"])
+]
 
-let diff = old.diff(new)
-// diff.commonIndexes = [0-1]
-// diff.removedIndexes = [2-4]
-// diff.insertedIndexes = [0, 3]
-
-let newIndexForA = diff.newIndexForOldIndex(0) // == 1
-let oldIndexForF = diff.oldIndexForNewIndex(3) // == nil
-
+let nestedDiff = old.diffNested(new)
 tableView.beginUpdates()
-tableView.deleteRowsAtIndexPaths(diff.removedIndexes.indexPathsInSection(0), withRowAnimation: .Automatic)
-tableView.insertRowsAtIndexPaths(diff.insertedIndexes.indexPathsInSection(0), withRowAnimation: .Automatic)
+self.data = new
+nestedDiff.applyToTableView(tableView, rowAnimation: .Automatic)
 tableView.endUpdates()
 ```
+
+## Limitations
+
+Item moves are treated as remove/insert, so when they are animated the cell will "teleport" to its new position, rather than sliding there. If you would like this feature, let me know in the Issues!
 
 ## Example Project
 
