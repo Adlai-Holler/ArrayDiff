@@ -1,6 +1,6 @@
 # ArrayDiff [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) ![Pods](https://cocoapod-badges.herokuapp.com/v/ArrayDiff/badge.png) ![Pod platforms](https://cocoapod-badges.herokuapp.com/p/ArrayDiff/badge.png) ![Pod license](https://cocoapod-badges.herokuapp.com/l/ArrayDiff/badge.png)
 
-A Swift utility to get the [longest-common-subsequence](https://en.wikipedia.org/wiki/Longest_common_subsequence_problem) difference of two arrays.
+An efficient Swift utility to compute the difference between two arrays. Get the `removedIndexes` and `insertedIndexes` and pass them directly along to `UITableView` or `UICollectionView` when you update your data! The [diffing algorithm](https://en.wikipedia.org/wiki/Longest_common_subsequence_problem) is the same that powers the `diff` utility – it's robust and quick.
 
 ## Usage
 
