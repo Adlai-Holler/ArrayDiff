@@ -58,7 +58,7 @@ final class ThrashingDataSource: NSObject, UITableViewDataSource {
 	let updateQueue: NSOperationQueue
 	
 	// The probability of each incremental update.
-	var rancor: Float = 0.1
+	var fickleness: Float = 0.1
 	
 	override init() {
 		updateQueue = NSOperationQueue()
@@ -83,14 +83,14 @@ final class ThrashingDataSource: NSObject, UITableViewDataSource {
 			print("Data before update: \(Section.arrayDescription(newData))")
 		}
 		let _deletedItems: [NSIndexSet] = (0..<newData.count).map { section in
-			let indexSet = NSIndexSet.randomIndexesInRange(0..<newData.count, probability: rancor)
+			let indexSet = NSIndexSet.randomIndexesInRange(0..<newData.count, probability: fickleness)
 			newData[section].items.removeAtIndexes(indexSet)
 			return indexSet
 		}
-		let _deletedSections = NSIndexSet.randomIndexesInRange(0..<newData.count, probability: rancor)
+		let _deletedSections = NSIndexSet.randomIndexesInRange(0..<newData.count, probability: fickleness)
 		newData.removeAtIndexes(_deletedSections)
 		
-		let _insertedSections = NSIndexSet.randomIndexesInRange(0..<newData.count, probability: rancor)
+		let _insertedSections = NSIndexSet.randomIndexesInRange(0..<newData.count, probability: fickleness)
 		let newSections = createRandomSections(_insertedSections.count)
 		newData.insertElements(newSections, atIndexes: _insertedSections)
 		for (i, index) in _insertedSections.enumerate() {
@@ -98,7 +98,7 @@ final class ThrashingDataSource: NSObject, UITableViewDataSource {
 		}
 		
 		let _insertedItems: [NSIndexSet] = (0..<newData.count).map { section in
-			let indexSet = NSIndexSet.randomIndexesInRange(0..<newData.count, probability: rancor)
+			let indexSet = NSIndexSet.randomIndexesInRange(0..<newData.count, probability: fickleness)
 			let newItems = createRandomItems(indexSet.count)
 			newData[section].items.insertElements(newItems, atIndexes: indexSet)
 			assert(newData[section].items[indexSet] == newItems)
