@@ -57,6 +57,20 @@ class ArrayDiffTests: XCTestCase {
 		}
 	}
 	
+	func testNewIndexForOldIndexWithInsertTail() {
+		let old = "a b c d".componentsSeparatedByString(" ")
+		let new = "a b c e f g j h d".componentsSeparatedByString(" ")
+		let diff = old.diff(new)
+		let newIndexes: [Int?] = (0..<old.count).map { diff.newIndexForOldIndex($0) }
+		let expectedNewIndexes: [Int?] = [0, 1, 2, 8]
+		// can't compare [Int?] to [Int?]
+		for (i, (idx, expectedIdx)) in zip(newIndexes, expectedNewIndexes).enumerate() {
+			if idx != expectedIdx {
+				XCTFail("New index for \(i) should be \(expectedIdx), got \(idx)")
+			}
+		}
+	}
+	
 	func testOldIndexForNewIndex() {
 		let old = "a b c d e".componentsSeparatedByString(" ")
 		let new = "m a b f".componentsSeparatedByString(" ")

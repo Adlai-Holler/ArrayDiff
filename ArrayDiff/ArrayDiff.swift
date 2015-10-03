@@ -2,6 +2,8 @@
 import Foundation
 
 public struct ArrayDiff {
+	static var debugLogging = false
+	
 	/// The indexes in the old array of the items that were kept
 	public let commonIndexes: NSIndexSet
 	/// The indexes in the old array of the items that were removed
@@ -24,13 +26,27 @@ public struct ArrayDiff {
 		if removedIndexes.containsIndex(index) { return nil }
 		
 		var result = index
-		result -= removedIndexes.countOfIndexesInRange(NSMakeRange(0, index))
-		result += insertedIndexes.countOfIndexesInRange(NSMakeRange(0, result + 1))
+		let deletedBefore = removedIndexes.countOfIndexesInRange(NSMakeRange(0, index))
+		result -= deletedBefore
+		var insertedAtOrBefore = 0
+		for i in insertedIndexes {
+			if i <= result  {
+				insertedAtOrBefore++
+				result++
+			} else {
+				break
+			}
+		}
+		if ArrayDiff.debugLogging {
+			print("***Old -> New\n Removed \(removedIndexes)\n Inserted \(insertedIndexes)\n \(index) - \(deletedBefore) + \(insertedAtOrBefore) = \(result)\n")
+		}
+		
 		return result
 	}
 }
 
 public extension Array {
+	
 	public func diff(other: Array<Element>, elementsAreEqual: ((Element, Element) -> Bool)) -> ArrayDiff {
 		var lengths: [[Int]] = Array<Array<Int>>(
 			count: count + 1,
