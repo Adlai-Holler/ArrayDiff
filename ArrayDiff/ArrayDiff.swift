@@ -80,12 +80,8 @@ public extension Array {
 			}
 		}
 		
-		let removedIndexes = NSMutableIndexSet()
-		for i in 0..<count {
-			if !commonIndexes.containsIndex(i) {
-				removedIndexes.addIndex(i)
-			}
-		}
+		let removedIndexes = NSMutableIndexSet(indexesInRange: NSMakeRange(0, count))
+		removedIndexes.removeIndexes(commonIndexes)
 		
 		let commonObjects = self[commonIndexes]
 		let addedIndexes = NSMutableIndexSet()
