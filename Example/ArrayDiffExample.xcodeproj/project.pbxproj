@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B99123EA9EDC92D672B36C4C /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8C5C4CE1B849F4DD20BD864 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		CC642FB81BC0620E0024AD39 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC642FB71BC0620E0024AD39 /* Utilities.swift */; settings = {ASSET_TAGS = (); }; };
 		CC71C17E1BBE16DA00772EDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC71C17D1BBE16DA00772EDB /* AppDelegate.swift */; };
 		CC71C1801BBE16DA00772EDB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC71C17F1BBE16DA00772EDB /* ViewController.swift */; };
 		CC71C1831BBE16DA00772EDB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC71C1811BBE16DA00772EDB /* Main.storyboard */; };
@@ -18,6 +19,7 @@
 /* Begin PBXFileReference section */
 		A8C5C4CE1B849F4DD20BD864 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC500C041BBF684900F0D46A /* ArrayDiffExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ArrayDiffExample-Bridging-Header.h"; sourceTree = "<group>"; };
+		CC642FB71BC0620E0024AD39 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		CC71C17A1BBE16DA00772EDB /* ArrayDiffExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArrayDiffExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC71C17D1BBE16DA00772EDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CC71C17F1BBE16DA00772EDB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 			children = (
 				CC71C17D1BBE16DA00772EDB /* AppDelegate.swift */,
 				CC71C17F1BBE16DA00772EDB /* ViewController.swift */,
+				CC642FB71BC0620E0024AD39 /* Utilities.swift */,
 				CC71C1811BBE16DA00772EDB /* Main.storyboard */,
 				CC71C1841BBE16DA00772EDB /* Assets.xcassets */,
 				CC71C1861BBE16DA00772EDB /* LaunchScreen.storyboard */,
@@ -212,6 +215,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC642FB81BC0620E0024AD39 /* Utilities.swift in Sources */,
 				CC71C1801BBE16DA00772EDB /* ViewController.swift in Sources */,
 				CC71C17E1BBE16DA00772EDB /* AppDelegate.swift in Sources */,
 			);

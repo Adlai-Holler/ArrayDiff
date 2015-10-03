@@ -17,42 +17,37 @@ class ViewController: UITableViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		title = "ArrayDiff Demo"
-		navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Update", style: .Plain, target: self, action: "updateTapped")
+		navigationItem.rightBarButtonItem = UIBarButtonItem(title: "+100", style: .Plain, target: self, action: "updateTapped")
 		dataSource.registerReusableViewsWithTableView(tableView)
 		tableView?.dataSource = dataSource
 	}
 	
 	@objc private func updateTapped() {
-		dataSource.enqueueRandomUpdate(tableView)
+		for _ in 0..<100 {
+			dataSource.enqueueRandomUpdate(tableView, completion: { dataSource in
+				let operationCount = dataSource.updateQueue.operationCount
+				self.title = operationCount > 0 ? String(operationCount) : "ArrayDiff Demo"
+			})
+		}
 	}
 	
 }
 
-private func createRandomSections(count: Int) -> [Section] {
-	return (0..<count).map { _ in createRandomSection(50) }
+private func createRandomSections(count: Int) -> [BasicSection<String>] {
+	return (0..<count).map { _ in createRandomSection(20) }
 }
 
-private func createRandomSection(count: Int) -> Section {
-	return Section(title: .random(), items: createRandomItems(count))
+private func createRandomSection(count: Int) -> BasicSection<String> {
+	return BasicSection(name: .random(), items: createRandomItems(count))
 }
 
 private func createRandomItems(count: Int) -> [String] {
 	return (0..<count).map { _ in .random() }
 }
 
-struct Section {
-	var title: String
-	var items: [String]
-	
-	static func arrayDescription(sections: [Section]) -> String {
-		let countsStr = sections.enumerate().map { "[\($0): \($1.items.count)]" }.joinWithSeparator(", ")
-		return "<sectionCount: \(sections.count) itemCounts: \(countsStr)>"
-	}
-}
-
 final class ThrashingDataSource: NSObject, UITableViewDataSource {
 	// This is only modified on the update queue
-	var data: [Section]
+	var data: [BasicSection<String>]
 
 	static var updateLogging = false
 	let updateQueue: NSOperationQueue
@@ -65,67 +60,76 @@ final class ThrashingDataSource: NSObject, UITableViewDataSource {
 		updateQueue.maxConcurrentOperationCount = 1
 		updateQueue.qualityOfService = .UserInitiated
 		
-		let initialSectionCount = 20
+		let initialSectionCount = 5
 		data = createRandomSections(initialSectionCount)
 		super.init()
 		updateQueue.name = "\(self).updateQueue"
 	}
 	
-	func enqueueRandomUpdate(tableView: UITableView) {
-		updateQueue.addOperationWithBlock { [weak self] in
-			self?.executeRandomUpdate(tableView)
+	func enqueueRandomUpdate(tableView: UITableView, completion: (ThrashingDataSource -> Void)) {
+		updateQueue.addOperationWithBlock {
+			self.executeRandomUpdate(tableView)
+			NSOperationQueue.mainQueue().addOperationWithBlock {
+				completion(self)
+			}
 		}
 	}
 	
 	private func executeRandomUpdate(tableView: UITableView) {
-		var newData = data
 		if ThrashingDataSource.updateLogging {
-			print("Data before update: \(Section.arrayDescription(newData))")
+			print("Data before update: \(data.nestedDescription)")
 		}
-		let _deletedItems: [NSIndexSet] = (0..<newData.count).map { section in
-			let indexSet = NSIndexSet.randomIndexesInRange(0..<newData.count, probability: fickleness)
-			newData[section].items.removeAtIndexes(indexSet)
-			return indexSet
+		
+		var newData = data
+		
+		let minimumSectionCount = 3
+		let minimumItemCount = 5
+		
+		let _deletedItems: [NSIndexSet] = newData.enumerate().map { sectionIndex, sectionInfo in
+			if sectionInfo.items.count >= minimumItemCount {
+				let indexSet = NSIndexSet.randomIndexesInRange(0..<sectionInfo.items.count, probability: fickleness)
+				newData[sectionIndex].items.removeAtIndexes(indexSet)
+				return indexSet
+			} else {
+				return NSIndexSet()
+			}
 		}
-		let _deletedSections = NSIndexSet.randomIndexesInRange(0..<newData.count, probability: fickleness)
-		newData.removeAtIndexes(_deletedSections)
+		
+		let _deletedSections: NSIndexSet
+		if newData.count >= minimumSectionCount {
+			_deletedSections = NSIndexSet.randomIndexesInRange(0..<newData.count, probability: fickleness)
+			newData.removeAtIndexes(_deletedSections)
+		} else {
+			_deletedSections = NSIndexSet()
+		}
 		
 		let _insertedSections = NSIndexSet.randomIndexesInRange(0..<newData.count, probability: fickleness)
 		let newSections = createRandomSections(_insertedSections.count)
 		newData.insertElements(newSections, atIndexes: _insertedSections)
 		for (i, index) in _insertedSections.enumerate() {
-			assert(newData[index].title == newSections[i].title)
+			assert(newData[index] == newSections[i])
 		}
 		
-		let _insertedItems: [NSIndexSet] = (0..<newData.count).map { section in
-			let indexSet = NSIndexSet.randomIndexesInRange(0..<newData.count, probability: fickleness)
+		let _insertedItems: [NSIndexSet] = newData.enumerate().map { sectionIndex, sectionInfo in
+			let indexSet = NSIndexSet.randomIndexesInRange(0..<sectionInfo.items.count, probability: fickleness)
 			let newItems = createRandomItems(indexSet.count)
-			newData[section].items.insertElements(newItems, atIndexes: indexSet)
-			assert(newData[section].items[indexSet] == newItems)
+			newData[sectionIndex].items.insertElements(newItems, atIndexes: indexSet)
+			assert(newData[sectionIndex].items[indexSet] == newItems)
 			return indexSet
 		}
 		
 		if ThrashingDataSource.updateLogging {
-			print("Data after update: \(Section.arrayDescription(newData))")
+			print("Data after update: \(newData.nestedDescription)")
 		}
-		let sectionDiff = data.diff(newData, elementsAreEqual: { $0.title == $1.title })
-		// diffs will exist for all sections that weren't deleted or inserted
-		let itemDiffs: [ArrayDiff?] = data.enumerate().map { oldSection, info in
-			if let newSection = sectionDiff.newIndexForOldIndex(oldSection) {
-				assert(newData[newSection].title == info.title, "Diffing for the wrong section!")
-				return data[oldSection].items.diff(newData[newSection].items)
-			} else {
-				return nil
-			}
-		}
+		let nestedDiff = data.diffNested(newData)
 		
 		// Assert that the diffing worked
-		assert(_insertedSections == sectionDiff.insertedIndexes)
-		assert(_deletedSections == sectionDiff.removedIndexes)
-		for (oldSection, diffOrNil) in itemDiffs.enumerate() {
+		assert(_insertedSections == nestedDiff.sectionsDiff.insertedIndexes)
+		assert(_deletedSections == nestedDiff.sectionsDiff.removedIndexes)
+		for (oldSection, diffOrNil) in nestedDiff.itemDiffs.enumerate() {
 			if let diff = diffOrNil {
 				assert(_deletedItems[oldSection] == diff.removedIndexes)
-				if let newSection = sectionDiff.newIndexForOldIndex(oldSection) {
+				if let newSection = nestedDiff.sectionsDiff.newIndexForOldIndex(oldSection) {
 					assert(_insertedItems[newSection] == diff.insertedIndexes)
 				} else {
 					assertionFailure("Found an item diff for a section that was removed. Wat.")
@@ -136,22 +140,7 @@ final class ThrashingDataSource: NSObject, UITableViewDataSource {
 		dispatch_sync(dispatch_get_main_queue()) {
 			tableView.beginUpdates()
 			self.data = newData
-			if sectionDiff.removedIndexes.count > 0 {
-				tableView.deleteSections(sectionDiff.removedIndexes, withRowAnimation: .Automatic)
-			}
-			if sectionDiff.insertedIndexes.count > 0 {
-				tableView.insertSections(sectionDiff.insertedIndexes, withRowAnimation: .Automatic)
-			}
-			for (oldSection, diffOrNil) in itemDiffs.enumerate() {
-				if let diff = diffOrNil {
-					tableView.deleteRowsAtIndexPaths(diff.removedIndexes.indexPathsInSection(oldSection), withRowAnimation: .Automatic)
-					if let newSection = sectionDiff.newIndexForOldIndex(oldSection) {
-						tableView.insertRowsAtIndexPaths(diff.insertedIndexes.indexPathsInSection(newSection), withRowAnimation: .Automatic)
-					} else {
-						assertionFailure("Found an item diff for a section that was removed. Wat.")
-					}
-				}
-			}
+			nestedDiff.applyToTableView(tableView, rowAnimation: .Automatic)
 			tableView.endUpdates()
 		}
 	}
@@ -161,7 +150,7 @@ final class ThrashingDataSource: NSObject, UITableViewDataSource {
 	}
 	
 	func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		return data[section].title
+		return data[section].name
 	}
 	
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -176,37 +165,5 @@ final class ThrashingDataSource: NSObject, UITableViewDataSource {
 	
 	func numberOfSectionsInTableView(tableView: UITableView) -> Int {
 		return data.count
-	}
-}
-
-extension NSIndexSet {
-	// Get a random index set in a range
-	static func randomIndexesInRange(range: Range<Int>, probability: Float) -> NSIndexSet {
-		let result = NSMutableIndexSet()
-		for i in range {
-			if Bool.random(probability) {
-				result.addIndex(i)
-			}
-		}
-		return result
-	}
-}
-
-extension Bool {
-	static var trueCount = 0
-	static var totalCount = 0
-	static func random(probability: Float) -> Bool {
-		let result = arc4random_uniform(100) < UInt32(probability * 100)
-		if result {
-			trueCount++
-		}
-		totalCount++
-		return result
-	}
-}
-
-extension String {
-	static func random() -> String {
-		return NSUUID().UUIDString
 	}
 }

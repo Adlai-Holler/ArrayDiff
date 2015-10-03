@@ -17,8 +17,19 @@ public extension NSRange {
 // MARK: NSIndexSet -> [NSIndexPath] conversion
 
 public extension NSIndexSet {
-	public func indexPathsInSection(section: Int) -> [NSIndexPath] {
-		return map { NSIndexPath(indexes: [section, $0], length: 2) }
+	/**
+	Returns an array of NSIndexPaths that correspond to these indexes in the given section.
+	
+	When reporting changes to table/collection view, you can improve performance by sorting
+	deletes in descending order and inserts in ascending order.
+	*/
+	public func indexPathsInSection(section: Int, ascending: Bool = true) -> [NSIndexPath] {
+		var result: [NSIndexPath] = []
+		result.reserveCapacity(count)
+		enumerateIndexesWithOptions(ascending ? [] : [.Reverse]) { index, _ in
+			result.append(NSIndexPath(indexes: [section, index], length: 2))
+		}
+		return result
 	}
 }
 

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CC642FB41BC056510024AD39 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC642FB31BC056510024AD39 /* Section.swift */; settings = {ASSET_TAGS = (); }; };
+		CC642FB61BC0596A0024AD39 /* UIKitIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC642FB51BC0596A0024AD39 /* UIKitIntegration.swift */; settings = {ASSET_TAGS = (); }; };
 		CC71C1571BBDD4B400772EDB /* ArrayDiff.h in Headers */ = {isa = PBXBuildFile; fileRef = CC71C1561BBDD4B400772EDB /* ArrayDiff.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC71C15E1BBDD4B500772EDB /* ArrayDiff.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC71C1531BBDD4B400772EDB /* ArrayDiff.framework */; settings = {ASSET_TAGS = (); }; };
 		CC71C1631BBDD4B500772EDB /* ArrayDiffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC71C1621BBDD4B500772EDB /* ArrayDiffTests.swift */; };
@@ -25,6 +27,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CC642FB31BC056510024AD39 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
+		CC642FB51BC0596A0024AD39 /* UIKitIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKitIntegration.swift; sourceTree = "<group>"; };
 		CC71C1531BBDD4B400772EDB /* ArrayDiff.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ArrayDiff.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC71C1561BBDD4B400772EDB /* ArrayDiff.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArrayDiff.h; sourceTree = "<group>"; };
 		CC71C1581BBDD4B400772EDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -78,6 +82,8 @@
 				CC71C1561BBDD4B400772EDB /* ArrayDiff.h */,
 				CC71C16F1BBDDBEC00772EDB /* FoundationExtensions.swift */,
 				CC71C16D1BBDD4C000772EDB /* ArrayDiff.swift */,
+				CC642FB31BC056510024AD39 /* Section.swift */,
+				CC642FB51BC0596A0024AD39 /* UIKitIntegration.swift */,
 				CC71C1581BBDD4B400772EDB /* Info.plist */,
 			);
 			path = ArrayDiff;
@@ -200,8 +206,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC642FB41BC056510024AD39 /* Section.swift in Sources */,
 				CC71C1701BBDDBEC00772EDB /* FoundationExtensions.swift in Sources */,
 				CC71C16E1BBDD4C000772EDB /* ArrayDiff.swift in Sources */,
+				CC642FB61BC0596A0024AD39 /* UIKitIntegration.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,6 +395,7 @@
 				CC71C1691BBDD4B500772EDB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CC71C16A1BBDD4B500772EDB /* Build configuration list for PBXNativeTarget "ArrayDiffTests" */ = {
 			isa = XCConfigurationList;
@@ -395,6 +404,7 @@
 				CC71C16C1BBDD4B500772EDB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
