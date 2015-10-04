@@ -82,6 +82,21 @@ class ArrayDiffTests: XCTestCase {
 		let reconstructedUnwrapped = reconstructed.map { $0.value }
 		XCTAssertEqual(reconstructedUnwrapped, new)
 	}
+	
+	func testSectionsSubscriptAtIndexPath() {
+		let sections = [
+			BasicSection(name: "Alpha", items: [1, 2, 3]),
+			BasicSection(name: "Beta", items: [4, 5])
+		]
+		let indexPath0 = NSIndexPath(indexes: [0, 3], length: 2)
+		XCTAssertNil(sections[indexPath0])
+		let indexPath1 = NSIndexPath(indexes: [2, 0], length: 2)
+		XCTAssertNil(sections[indexPath1])
+		let indexPath2 = NSIndexPath(indexes: [0, 2], length: 2)
+		XCTAssertEqual(sections[indexPath2], 3)
+		let indexPath3 = NSIndexPath(indexes: [1, 0], length: 2)
+		XCTAssertEqual(sections[indexPath3], 4)
+	}
 }
 
 struct TestType {

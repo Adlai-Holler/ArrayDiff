@@ -19,6 +19,20 @@ public extension Array where Element: SectionType {
 		let countsStr = enumerate().map { "[\($0): \($1.items.count)]" }.joinWithSeparator(", ")
 		return "<sectionCount: \(count) itemCounts: \(countsStr)>"
 	}
+	
+	/**
+	Attempt to retrieve the item at the given index path. Returns nil if the index is out of bounds.
+	*/
+	public subscript (indexPath: NSIndexPath) -> Element.Item? {
+		let sectionIndex = indexPath.indexAtPosition(0)
+		guard indices.contains(sectionIndex) else { return nil }
+		
+		let section = self[sectionIndex]
+		let itemIndex = indexPath.indexAtPosition(1)
+		guard section.items.indices.contains(itemIndex) else { return nil }
+		
+		return section.items[itemIndex]
+	}
 }
 
 /**
