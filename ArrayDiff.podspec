@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name        = "ArrayDiff"
-  s.version     = "1.1.1"
+  s.version     = "1.1.2"
   s.summary     = "ArrayDiff quickly computes the difference between two arrays, works great with UITableView/UICollectionView"
   s.homepage    = "https://github.com/Adlai-Holler/ArrayDiff"
   s.license     = { :type => "MIT" }
@@ -9,6 +9,6 @@ Pod::Spec.new do |s|
 
   s.requires_arc = true
   s.ios.deployment_target = "8.0"
-  s.source   = { :git => "https://github.com/Adlai-Holler/ArrayDiff.git", :tag => "v1.1.1" }
+  s.source   = { :git => "https://github.com/Adlai-Holler/ArrayDiff.git", :tag => "v1.1.2" }
   s.source_files = "ArrayDiff/*.swift"
 end
