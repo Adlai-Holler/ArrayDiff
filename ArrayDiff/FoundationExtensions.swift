@@ -26,7 +26,7 @@ public extension NSIndexSet {
 	public func indexPathsInSection(section: Int, ascending: Bool = true) -> [NSIndexPath] {
 		var result: [NSIndexPath] = []
 		result.reserveCapacity(count)
-		enumerateIndexesWithOptions(ascending ? [] : [.Reverse]) { index, _ in
+		enumerateIndexesWithOptions(ascending ? [] : .Reverse) { index, _ in
 			result.append(NSIndexPath(indexes: [section, index], length: 2))
 		}
 		return result

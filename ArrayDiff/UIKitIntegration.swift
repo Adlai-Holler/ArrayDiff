@@ -16,6 +16,16 @@ public extension NestedDiff {
 	*/
 	public func applyToTableView(tableView: UITableView, rowAnimation: UITableViewRowAnimation) {
 		assert(NSThread.isMainThread())
+		// Apply updates in safe order for good measure.
+		// Item deletes, descending
+		// Section deletes
+		// Section inserts
+		// Item inserts, ascending
+		for (oldSection, diffOrNil) in itemDiffs.enumerate() {
+			if let diff = diffOrNil {
+				tableView.deleteRowsAtIndexPaths(diff.removedIndexes.indexPathsInSection(oldSection, ascending: false), withRowAnimation: rowAnimation)
+			}
+		}
 		if sectionsDiff.removedIndexes.count > 0 {
 			tableView.deleteSections(sectionsDiff.removedIndexes, withRowAnimation: rowAnimation)
 		}
@@ -24,7 +34,6 @@ public extension NestedDiff {
 		}
 		for (oldSection, diffOrNil) in itemDiffs.enumerate() {
 			if let diff = diffOrNil {
-				tableView.deleteRowsAtIndexPaths(diff.removedIndexes.indexPathsInSection(oldSection, ascending: false), withRowAnimation: rowAnimation)
 				if let newSection = sectionsDiff.newIndexForOldIndex(oldSection) {
 					tableView.insertRowsAtIndexPaths(diff.insertedIndexes.indexPathsInSection(newSection), withRowAnimation: rowAnimation)
 				} else {
@@ -41,6 +50,16 @@ public extension NestedDiff {
 	*/
 	public func applyToCollectionView(collectionView: UICollectionView) {
 		assert(NSThread.isMainThread())
+		// Apply updates in safe order for good measure. 
+		// Item deletes, descending
+		// Section deletes
+		// Section inserts
+		// Item inserts, ascending
+		for (oldSection, diffOrNil) in itemDiffs.enumerate() {
+			if let diff = diffOrNil {
+				collectionView.deleteItemsAtIndexPaths(diff.removedIndexes.indexPathsInSection(oldSection, ascending: false))
+			}
+		}
 		if sectionsDiff.removedIndexes.count > 0 {
 			collectionView.deleteSections(sectionsDiff.removedIndexes)
 		}
@@ -49,7 +68,6 @@ public extension NestedDiff {
 		}
 		for (oldSection, diffOrNil) in itemDiffs.enumerate() {
 			if let diff = diffOrNil {
-				collectionView.deleteItemsAtIndexPaths(diff.removedIndexes.indexPathsInSection(oldSection))
 				if let newSection = sectionsDiff.newIndexForOldIndex(oldSection) {
 					collectionView.insertItemsAtIndexPaths(diff.insertedIndexes.indexPathsInSection(newSection))
 				} else {
