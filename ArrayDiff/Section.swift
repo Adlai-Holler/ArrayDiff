@@ -82,6 +82,19 @@ public struct NestedDiff {
 			return nil
 		}
 	}
+    
+    /**
+     Returns true iff there are no changes to the sections or items in this diff
+    */
+    public var isEmpty: Bool {
+        return sectionsDiff.isEmpty && !itemDiffs.contains { diffOrNil in
+            if let diff = diffOrNil {
+                return !diff.isEmpty
+            } else {
+                return false
+            }
+        }
+    }
 }
 
 public extension Array where Element: SectionType {

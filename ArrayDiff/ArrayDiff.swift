@@ -43,6 +43,13 @@ public struct ArrayDiff {
 		
 		return result
 	}
+    
+    /**
+     Returns true iff there are no changes to the items in this diff
+     */
+    public var isEmpty: Bool {
+        return removedIndexes.count == 0 && insertedIndexes.count == 0
+    }
 }
 
 public extension Array {
