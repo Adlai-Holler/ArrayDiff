@@ -62,8 +62,8 @@ public extension Array {
 				repeatedValue: 0)
 		)
 		
-        for i in (0...count).reverse() {
-            for j in (0...other.count).reverse() {
+		for i in (0...count).reverse() {
+			for j in (0...other.count).reverse() {
 				if i == count || j == other.count {
 					lengths[i][j] = 0
 				} else if elementsAreEqual(self[i], other[j]) {
@@ -76,7 +76,7 @@ public extension Array {
 		let commonIndexes = NSMutableIndexSet()
 		var i = 0, j = 0
 
-        while i < count && j < other.count {
+		while i < count && j < other.count {
 			if elementsAreEqual(self[i], other[j]) {
 				commonIndexes.addIndex(i)
 				i += 1
@@ -93,10 +93,10 @@ public extension Array {
 		
 		let commonObjects = self[commonIndexes]
 		let addedIndexes = NSMutableIndexSet()
-        i = 0
-        j = 0
-        
-        while i < commonObjects.count || j < other.count {
+		i = 0
+		j = 0
+		
+		while i < commonObjects.count || j < other.count {
 			if i < commonObjects.count && j < other.count && elementsAreEqual (commonObjects[i], other[j]) {
 				i += 1
 				j += 1
