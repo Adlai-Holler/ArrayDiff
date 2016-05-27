@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name        = "ArrayDiff"
-  s.version     = "1.2.0"
+  s.version     = "1.3.0"
   s.summary     = "ArrayDiff quickly computes the difference between two arrays, works great with UITableView/UICollectionView"
   s.homepage    = "https://github.com/Adlai-Holler/ArrayDiff"
   s.license     = { :type => "MIT" }

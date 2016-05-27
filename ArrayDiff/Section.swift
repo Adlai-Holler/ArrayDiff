@@ -5,7 +5,7 @@ Types that conform to this protocol represent a section of a table.
 - See: `NamedSection` for an example implementation
 */
 public protocol SectionType: Equatable {
-	typealias Item: Equatable
+	associatedtype Item: Equatable
 	var items: [Item] { get }
 }
 

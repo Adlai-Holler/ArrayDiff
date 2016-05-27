@@ -31,8 +31,8 @@ public struct ArrayDiff {
 		var insertedAtOrBefore = 0
 		for i in insertedIndexes {
 			if i <= result  {
-				insertedAtOrBefore++
-				result++
+				insertedAtOrBefore += 1
+				result += 1
 			} else {
 				break
 			}
@@ -62,8 +62,8 @@ public extension Array {
 				repeatedValue: 0)
 		)
 		
-		for var i = count; i >= 0; i-- {
-			for var j = other.count; j >= 0; j-- {
+		for i in (0...count).reverse() {
+			for j in (0...other.count).reverse() {
 				if i == count || j == other.count {
 					lengths[i][j] = 0
 				} else if elementsAreEqual(self[i], other[j]) {
@@ -74,16 +74,17 @@ public extension Array {
 			}
 		}
 		let commonIndexes = NSMutableIndexSet()
-		
-		for var i = 0, j = 0; i < count && j < other.count; {
+		var i = 0, j = 0
+
+		while i < count && j < other.count {
 			if elementsAreEqual(self[i], other[j]) {
 				commonIndexes.addIndex(i)
-				i++
-				j++
+				i += 1
+				j += 1
 			} else if lengths[i+1][j] >= lengths[i][j+1] {
-				i++
+				i += 1
 			} else {
-				j++
+				j += 1
 			}
 		}
 		
@@ -92,13 +93,16 @@ public extension Array {
 		
 		let commonObjects = self[commonIndexes]
 		let addedIndexes = NSMutableIndexSet()
-		for var i = 0, j = 0; i < commonObjects.count || j < other.count; {
+		i = 0
+		j = 0
+		
+		while i < commonObjects.count || j < other.count {
 			if i < commonObjects.count && j < other.count && elementsAreEqual (commonObjects[i], other[j]) {
-				i++
-				j++
+				i += 1
+				j += 1
 			} else {
 				addedIndexes.addIndex(j)
-				j++
+				j += 1
 			}
 		}
 		
