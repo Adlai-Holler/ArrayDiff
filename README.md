@@ -2,9 +2,32 @@
 
 An efficient Swift utility to compute the difference between two arrays. Get the `removedIndexes` and `insertedIndexes` and pass them directly along to `UITableView` or `UICollectionView` when you update your data! The [diffing algorithm](https://en.wikipedia.org/wiki/Longest_common_subsequence_problem) is the same that powers the `diff` utility – it's robust and quick.
 
-## Usage
+## Basic Example
 
-A really powerful use for this framework is when updating a UITableView or UICollectionView. It can be very expensive to call `reloadData` but really inconvenient to keep track of array differences your self.
+```swift
+let old = [ "a", "b", "c", "d" ]
+let new = [ "a", "c", "e", "f", "d" ]
+
+let diff = old.diff(new)
+// diff.removedIndexes = { 1 }
+// diff.insertedIndexes = { 2, 3 }
+
+// To update rows in section 0:
+tableView.beginUpdates()
+self.data = new
+diff.applyToRowsInTableView(tableView, section: 0, rowAnimation: .Automatic)
+tableView.endUpdates()
+
+// Or to update sections:
+tableView.beginUpdates()
+self.data = new
+diff.applyToSectionsInTableView(tableView, rowAnimation: .Automatic)
+tableView.endUpdates()
+```
+
+## Nested Diff
+
+You can use types that conform to `SectionType` to perform nested row- and section-level diffs simultaneously:
 
 ```swift
 let old = [
@@ -19,10 +42,10 @@ let new = [
 ]
 
 let nestedDiff = old.diffNested(new)
-// nestedDiff.sectionsDiff.removedIndexes == [1]
-// nestedDiff.sectionsDiff.insertedIndexes == [2]
-// nestedDiff.itemDiffs[0].removedIndexes == [2]
-// nestedDiff.itemDiffs[0].insertedIndexes == [5]
+// nestedDiff.sectionsDiff.removedIndexes == {1}
+// nestedDiff.sectionsDiff.insertedIndexes == {2}
+// nestedDiff.itemDiffs[0].removedIndexes == {2}
+// nestedDiff.itemDiffs[0].insertedIndexes == {5}
 // etc.
 
 tableView.beginUpdates()
